@@ -1,63 +1,49 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './entities/user.entity';
 
-type User = {
-  id: number;
-  name: string;
-  age?: number;
-  email: string;
-};
+// type User = {
+//   id: number;
+//   name: string;
+//   age?: number;
+//   email: string;
+// };
 
 @Injectable()
 export class UsersService {
-  private users: User[] = [];
+  // private users: User[] = [];
+
+  constructor(
+    @InjectRepository(User)
+    private readonly usersRepository: Repository<User>,
+  ) {}
+
 
   create(createUserDto: CreateUserDto) {
-    const user = {
-      id: Date.now(),
-      ...createUserDto,
-    };
-    /*
-      O que ta aqui em cima é a mesma coisa q escrever:
-    const user = {
-    id: Date.now(),
-    name: createUserDto.name,
-    age: createUserDto.age,
-    email: createUserDto.email,
-  };
-    */
-
-    this.users.push(user);
-
-    return user;
+    const user = this.usersRepository.create(createUserDto);
+    return this.usersRepository.save(user);
   }
 
   findAll() {
-    return this.users;
+    return this.usersRepository.find();
   }
 
   findOne(id: number) {
-    return this.users.find((user) => user.id === id);
+    return this.usersRepository.findOne({
+      where: { id },
+    });
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    const user = this.findOne(id);
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    await this.usersRepository.update(id, updateUserDto);
 
-    if (!user) {
-      return undefined;
-    }
-
-    Object.assign(user, updateUserDto);
-
-    return user;
+    return this.findOne(id);
   }
 
   remove(id: number) {
-    const user = this.findOne(id);
-
-    this.users = this.users.filter((user) => user.id !== id);
-
-    return user;
+    return this.usersRepository.delete(id);
   }
 }
