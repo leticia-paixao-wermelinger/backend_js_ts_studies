@@ -46,6 +46,9 @@ lerna-debug.log*
 .temp
 .tmp
 
+# Local study notes
+STUDY_CHECKLIST.md
+
 # Runtime data
 pids
 *.pid

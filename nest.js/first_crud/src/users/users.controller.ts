@@ -13,14 +13,14 @@ export class UsersController {
   }
 
   @Get()
-  find(@Query('id') id?: string) {
-    if (id) {
-      return this.usersService.findOne(+id);
-    }
-
+  findAll() {
     return this.usersService.findAll();
   }
 
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.usersService.findOne(+id);
+  }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
