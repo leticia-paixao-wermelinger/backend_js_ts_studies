@@ -44,6 +44,28 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## Manual API tests
+
+Start the server first:
+
+```bash
+$ npm run start:dev
+```
+
+Create a user:
+
+```bash
+curl -X POST http://localhost:3000/users/create \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Leticia","age":25,"email":"leticia@email.com"}'
+```
+
+Find all users:
+
+```bash
+curl http://localhost:3000/users
+```
+
 ## Run tests
 
 ```bash
