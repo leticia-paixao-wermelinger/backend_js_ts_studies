@@ -55,7 +55,7 @@ export class UsersService {
       throw new BadRequestException(`At least one field must be provided for update`); // returns 409
     }
 
-    await this.findOne(id);
+    const user = await this.findOne(id);
 
     if (updateUserDto.email && updateUserDto.email !== user.email) {
       await this.validateEmailExistence(updateUserDto.email);
